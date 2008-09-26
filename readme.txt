@@ -19,9 +19,9 @@ For a changelog see [here](http://www.jek-source.net/#download "Plugin Website")
 == Screenshots ==
 Please provide screenshots of how YOU use this plugin!
 
-1. v0.5 - nice integration in your theme. [de-DE]
+1. v0.5 - nice integration in your theme.
 
-2. v0.5 - widget options [de-DE]
+2. v0.5 - widget options
 
 == Installation ==
 
@@ -45,7 +45,7 @@ As soon as your question arrives I will add it here.
 Do your server run php5? We need the "DOM" section of your phpinfo() show "enabled"-values.
 
 = There's an error message like "ERROR: domdocument::domdocument() expects 2 parameter to be long" =
-Disable the "domxml" extension of your php installation. "domxml" is a legacy extension introduced for php4 which lacks cool dom-functions. But in php5 they are built in and - guess what - **incompatible** with the old extension. Se we rely on the new bright and shiny built-in functions.
+Disable the `domxml´ extension of your php installation. `domxml` is a legacy extension introduced for php4 which lacks cool dom-functions. But in php5 they are built in and - guess what - **incompatible** with the old extension. So we rely on the new bright and shiny built-in functions.
 
 
 == Other Notes ==
