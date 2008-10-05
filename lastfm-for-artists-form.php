@@ -45,13 +45,13 @@
 	    <input style="width: 25px;" id="lfmfa_<?php echo $number; ?>a_num" name="widget_lfm_fa[<?php echo $number; ?>][num]" type="text" value="<?php echo $num; ?>" />
     </label></p>
 	<p style="text-align:right;"><label for="lfm4a_<?php echo $number; ?>_pre_format_string"><? _e('The Format String serving as header of your list, available data is of the first show:', LFM_US_DOMAIN ); ?>
-    	<textarea style="width: 60%;" id="lfmfa_<?php echo $number; ?>_pre_format_string" name="widget_lfm_fa[<?php echo $number; ?>][pre_format_string]" cols="20" rows="5" class="widefat"><?php echo $pre_format_string;?></textarea>
+    	<textarea wrap="off" style="width: 60%;" id="lfmfa_<?php echo $number; ?>_pre_format_string" name="widget_lfm_fa[<?php echo $number; ?>][pre_format_string]" cols="20" rows="7" class="widefat lfmfa-format-string"><?php echo $pre_format_string;?></textarea>
     </label></p>
 	<p style="text-align:right;"><label for="lfm4a_<?php echo $number; ?>_format_string"><? _e('The Format String for one show:', LFM_US_DOMAIN ); ?>
-	    <textarea style="width: 60%;" id="lfmfa_<?php echo $number; ?>_format_string" name="widget_lfm_fa[<?php echo $number; ?>][format_string]" cols="20" rows="10" class="widefat"><?php echo $format_string; ?></textarea>
+	    <textarea wrap="off" style="width: 60%;" id="lfmfa_<?php echo $number; ?>_format_string" name="widget_lfm_fa[<?php echo $number; ?>][format_string]" cols="20" rows="7" class="widefat lfmfa-format-string"><?php echo $format_string; ?></textarea>
     </label></p>
 	<p style="text-align:right;"><label for="lfm4a_<?php echo $number; ?>_post_format_string"><? _e('The Format String serving as footer of your list, available data is of the last shown show:', LFM_US_DOMAIN ); ?>
-    	<textarea style="width: 60%;" id="lfmfa_<?php echo $number; ?>_post_format_string" name="widget_lfm_fa[<?php echo $number; ?>][post_format_string]" cols="20" rows="5" class="widefat"><?php echo $post_format_string; ?></textarea>
+    	<textarea wrap="off" style="width: 60%;" id="lfmfa_<?php echo $number; ?>_post_format_string" name="widget_lfm_fa[<?php echo $number; ?>][post_format_string]" cols="20" rows="7" class="widefat lfmfa-format-string"><?php echo $post_format_string; ?></textarea>
    		<input type="hidden" name="widget_lfm_fa[<?php echo $number; ?>][submit]" value="1" />
 
     </label></p>
