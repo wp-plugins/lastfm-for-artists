@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Last.FM for Artists
-Version: 0.5.1
+Version: 0.6
 Plugin URI: http://www.jek-source.net
 Description: Loads the events of an artist and displays them on your blog. Uses Last.FMs REST 2.0 APIs. Loosely based on Simon Wheatley Last.FM Events plugin. 
 Author: J.org
