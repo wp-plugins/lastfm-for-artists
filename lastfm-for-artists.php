@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Last.FM for Artists
-Version: 0.5
+Version: 0.5.1
 Plugin URI: http://www.jek-source.net
 Description: Loads the events of an artist and displays them on your blog. Uses Last.FMs REST 2.0 APIs. Loosely based on Simon Wheatley Last.FM Events plugin. 
 Author: J.org
@@ -30,7 +30,8 @@ define('LFM_US_DOMAIN','lastfm-for-artists');
 load_plugin_textdomain(LFM_US_DOMAIN, PLUGINDIR.'/'.dirname(plugin_basename(__FILE__)).'/lang');
 
 // You can edit this, but I don't suggest making it too often
-define('LFM_US_CACHE_AGE', 60 * 60); // In seconds, so this is 1 hour (60 minutes). No need to check more frequently than this.
+define('LFM_US_CACHE_AGE_EVENTS', 60 * 60); // In seconds, so this is 1 hour (60 minutes). No need to check more frequently than this.
+define('LFM_US_CACHE_AGE_TOPTRACKS', 60 * 60 * 24 * 7); // In seconds, so this is 1 week (60 minutes). No need to check more frequently than this.
 define('LFM_US_CACHE', 'lfm_fa_cached_events');
 define('LFM_US_OPTIONS', 'lfm_fa_widget');
 
@@ -47,8 +48,8 @@ define('LFM_US_FETCH_TIME_OUT', 5); // 5 second timeout, Last.FM can be slow
 define('LFM_US_USE_GZIP', true);
 
 // DEBUGGING via firephp, which I recommend btw.
-// require('fb.php');
-// ob_start();
+//require('fb.php');
+//ob_start();
 
 // needed for html client class "Snoopy"
 require_once(ABSPATH . WPINC . '/class-snoopy.php');
@@ -69,7 +70,7 @@ class LastFmForArtists {
 %LOCATION-SUMMARY%
 </a>
 </li>',
-					'post_format_string'=> '</ul><p class="lastfm-profile">(<a href="%ARTIST-URL%" target="_blank">powered by Last.fm</a>)</p>',
+					'post_format_string'=> '</ul><p class="lastfm-profile">(powered by <a href="%ARTIST-URL%" target="_blank">Last.fm</a> | <a href="http://www.jek-source.net" target="_blank">j:org</a>)</p>',
 					'hide_on_empty'		=>true,
 					'test_run' 			=>false
 				);
@@ -77,7 +78,7 @@ class LastFmForArtists {
 	// the constructor, plugin-initializer
 	function LastFmForArtists()
 	{
-		// this adds a little css to the admin pages allowing for neat css-tooltips and some more style.
+		// this adds a little css and ajvascript to the admin widget page allowing for neat css-tooltips and some more style.
 		add_action( 'admin_head', array( &$this, 'lfm4a_admin_head' ) );
 
 		// register the cache-deleter
@@ -136,6 +137,7 @@ class LastFmForArtists {
 
 		// check for missing options and use defaults.
 		$artistname 		= isset($options['artistname']) 		? $options['artistname'] 		: $default_options['artistname'];
+		$type		 		= isset($options['type']) 				? $options['type'] 				: $default_options['type'];
 		$title 				= isset($options['title']) 				? $options['title'] 			: $default_options['title'];
 		$num 				= isset($options['num'])				? $options['num']				: $default_options['num'];
 		$pre_format_string 	= isset($options['pre_format_string'])	? $options['pre_format_string']	: $default_options['pre_format_string'];
@@ -151,17 +153,24 @@ class LastFmForArtists {
 				return;	
 			}
 		}
-		
-		// This will use a cached copy of the events data if it exists and is in date
-		$events = & $this->maybe_get_new_events($artistname);
+		switch ($type) {
+			case 1:
+				// This will use a cached copy of the events data if it exists and is in date
+				$items = & $this->maybe_get_new_events($artistname);
+				break;
+			case 2:
+				// This will use a cached copy of the toptracks data if it exists and is in date
+				$items = & $this->maybe_get_new_toptracks($artistname);
+				break;
+		}
 
 		// If we're not supposed to have anything when we're empty, we abandon ship at this point.
-		if ( empty($events) && $hide_on_empty ) return;
+		if ( empty($items) && $hide_on_empty ) return;
 
 		// output wordpress stuff
 		echo $before_widget . $before_title . htmlspecialchars( $title ) . $after_title;
 
-		if ($events === false) {
+		if ($items === false) {
 			echo '<p style="'.LFM_US_ALERT_STYLE.'">'.__('Could not retrieve data.', LFM_US_DOMAIN).'</p>';
 			return;
 		}
@@ -170,9 +179,15 @@ class LastFmForArtists {
 		if ($test_run) {
 			echo "<p>".__('This widget is only seen by logged-in users!', LFM_US_DOMAIN)."</p>";
 		}
-
-		$this->write_events($events, $artistname, $num, $pre_format_string, $format_string, $post_format_string);
-
+		
+		switch ($type) {
+			case 1:
+				$this->write_events($items, $artistname, $num, $pre_format_string, $format_string, $post_format_string);	
+				break;
+			case 2:
+				$this->write_toptracks($items, $artistname, $num, $pre_format_string, $format_string, $post_format_string);	
+				break;
+		}
 		echo $after_widget;
 	}
 
@@ -212,8 +227,7 @@ class LastFmForArtists {
 		
 				$options = array();
 				
-				$options['type'] = 1; // events
-		
+				$options['type'] = $posted['type'];
 				$options['title'] = strip_tags(stripslashes($posted['title']));
 				$options['artistname'] = strip_tags(stripslashes($posted['artistname']));
 				$options['num'] = strip_tags(stripslashes($posted['num']));
@@ -238,6 +252,7 @@ class LastFmForArtists {
         }
  
 		// Be sure you format your options to be valid HTML attributes.
+		$type = $values['type'];
 		$title = htmlspecialchars($values['title'], ENT_QUOTES);
 		$artistname = htmlspecialchars($values['artistname'], ENT_QUOTES);
 		$num = htmlspecialchars($values['num'], ENT_QUOTES);
@@ -246,16 +261,19 @@ class LastFmForArtists {
 		$post_format_string = htmlspecialchars($values['post_format_string'], ENT_QUOTES);
 		$hide_on_empty_checked = ($values['hide_on_empty']) ? 'checked="checked"' : '';
 		$test_run = ($values['test_run']) ? 'checked="checked"' : '';
-
+		
         include("lastfm-for-artists-form.php");
 	}
 	
-	// this outputs our stylesheet for the admin section.
+	// this outputs our stylesheet and javascript for the admin section.
 	function lfm4a_admin_head()
 	{
-		$url = get_settings( 'siteurl' );
-		$url = $url . '/wp-content/plugins/lastfm-for-artists/lastfm-for-artists-admin.css';
-		echo '<link rel="stylesheet" type="text/css" href="' . $url . '" />';
+		if ( strpos($_SERVER['REQUEST_URI'], 'widgets.php') !== false) {
+			$url = get_settings( 'siteurl' );
+			$url = $url . '/wp-content/plugins/lastfm-for-artists/';
+			echo '<link rel="stylesheet" type="text/css" href="' . $url . 'lastfm-for-artists-admin.css" />';
+			echo '<script type="text/javascript" src="' . $url . 'lastfm-for-artists-admin.js"></script>';
+		}
 	}
 	// this function will delete _all_ options
 	function delete_cache() {
@@ -302,19 +320,19 @@ class LastFmForArtists {
 	function maybe_get_new_events( $artistname )
 	{	
 		// Check if we've got a cached copy
-		$cached_events = get_option( LFM_US_CACHE );
+		$cache = get_option( LFM_US_CACHE );
 		// No cache? Get new events...
-		if ( !isset( $cached_events ) or !isset( $cached_events[$artistname] ) ) return $this->get_new_events( $artistname );
+		if ( !isset( $cache ) or !isset( $cache[$artistname] ) or !isset( $cache[$artistname]['events'] ) ) return $this->get_new_events( $artistname );
 	
 		// Check if it's out of date
 		$now = time();
-		$out_of_date = (bool) (( $now - $cached_events[$artistname]['modified_timestamp'] ) > LFM_US_CACHE_AGE);
+		$out_of_date = (bool) (( $now - $cache[$artistname]['events']['modified_timestamp'] ) > LFM_US_CACHE_AGE);
+		
 		// Out of date? Get new events...
 		if ( $out_of_date ) return $this->get_new_events( $artistname );
 	
-		return $cached_events[$artistname]['events'];
+		return $cache[$artistname]['events'];
 	}
-
 	// Get new events data from Last.FM
 	function get_new_events( $artistname )
 	{
@@ -324,13 +342,13 @@ class LastFmForArtists {
 		$xmlstring = $this->fetch_remote_file_contents( $url );
 	
 		// Get cache-object
-		$cached_events = get_option(LFM_US_CACHE);
+		$cache = get_option(LFM_US_CACHE);
 		
 		// Something went wrong with the request
 		if ( $xmlstring === false ) {
 			// Error occurde, got a cache? Use it...
-			if ( ! empty( $cached_events ) and  !empty( $cached_events[$artistname] ) ) {
-				return $cached_events[$artistname]['events'];
+			if ( ! empty( $cache ) and  !empty( $cache[$artistname]) and  !empty( $cache[$artistname]['events'] ) ) {
+				return $cache[$artistname]['events'];
 			}
 			return false;
 		}
@@ -345,8 +363,8 @@ class LastFmForArtists {
 		if ($root->attributes->getNamedItem( "status" )->nodeValue == "failed") {
 	
 			// Error occured, got a cache? Use it...
-			if ( ! empty( $cached_events ) and  !empty( $cached_events[$artistname] ) ) {
-				return $cached_events[$artistname]['events'];
+			if ( ! empty( $cache ) and  !empty( $cache[$artistname]) and  !empty( $cache[$artistname]['events'] ) ) {
+				return $cache[$artistname]['events'];
 			}
 			// fake an event containing the error information.
 			return array( array('title' 		=> 'Last.fm ERROR: '.$root->firstChild->nodeValue,
@@ -361,23 +379,139 @@ class LastFmForArtists {
 		}
 		
 		// Create an object we can cache, including a modified time so we know when it goes out of date
-		if ( !isset( $cached_events ) ) {
-			$cached_events = array( $artistname => array('events'=>array(), 'modified_timestamp'=>time()) );
-		} else {
-			$cached_events [ $artistname ] = array('events'=>array(), 'modified_timestamp'=>time());
+		if ( !isset( $cache ) ) {
+			$cache = array( $artistname => array( 'events' => array( 'modified_timestamp' => time() ) ) );
+		} else if (!isset( $cache[$artistname] ) ) {
+			$cache [ $artistname ] = array( 'events' => array( 'modified_timestamp' => time() ) );
+		} else if (!isset( $cache[$artistname]['events'] ) ){
+			$cache [ $artistname ][ 'events' ] = array( 'modified_timestamp' => time() );
 		}
 	
 		// Create a reference for ease
-		$events = & $cached_events [$artistname]['events'];
+		$events = & $cache[$artistname]['events'];
 		if (! $root->attributes->getNamedItem( "total" )->nodeValue == "0" ) {
-			foreach ( $root->childNodes as $eventNode) {
-				$events[] = $this->parse_event( $eventNode );
+			foreach ( $root->childNodes as $key => $eventNode) {
+				$events[$key] = $this->parse_event( $eventNode );
 			}
+			ksort($events);
+		}
+		// update cache
+		update_option(LFM_US_CACHE, $cache);
+		
+		// return events
+		return $cache[$artistname]['events'];
+	}
+
+	// Provide an associative array of track info, using the cache if in date or getting 
+	// new data if the cache is outdated
+	function maybe_get_new_toptracks( $artistname )
+	{	
+		// Check if we've got a cached copy
+		$cache = get_option( LFM_US_CACHE );
+		// No cache? Get new events...
+		if ( !isset( $cache ) or !isset( $cache[$artistname] ) or !isset( $cache[$artistname]['toptracks'] ) ) return $this->get_new_toptracks( $artistname );
+	
+		// Check if it's out of date
+		$now = time();
+		$out_of_date = (bool) (( $now - $cache[$artistname]['toptracks']['modified_timestamp'] ) > LFM_US_CACHE_AGE);
+		
+		// Out of date? Get new events...
+		if ( $out_of_date ) return $this->get_new_toptracks( $artistname );
+	
+		return $cache[$artistname]['toptracks'];
+	}
+	// Get new top track data from Last.FM
+	function get_new_toptracks( $artistname )
+	{
+	
+		// Get the file contents in a way which will work, hopefully even for systems with url_file_open off.
+		$url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=".str_replace(' ', '+', $artistname)."&api_key=c8034aa60717c2dcac9922e90816f28e";
+		$xmlstring = $this->fetch_remote_file_contents( $url );
+		
+		// Get cache-object
+		$cache = get_option(LFM_US_CACHE);
+		
+		// Something went wrong with the request
+		if ( $xmlstring === false ) {
+			// Error occurde, got a cache? Use it...
+			if ( ! empty( $cache ) and  !empty( $cache[$artistname]) and  !empty( $cache[$artistname]['toptracks'] ) ) {
+				return $cache[$artistname]['toptracks'];
+			}
+			return false;
+		}
+		// get new DOM-Model.
+		$xml = new DOMDocument('1.0', 'UTF-8');
+		$xml->preserveWhiteSpace = FALSE;
+		$xml->loadXML($xmlstring);
+		
+		// check if there was an error
+		$root = $xml->getElementsByTagName( 'lfm' )->item( 0 );
+		if ($root->attributes->getNamedItem( "status" )->nodeValue == "failed") {
+	
+			// Error occured, got a cache? Use it...
+			if ( ! empty( $cache ) and  !empty( $cache[$artistname]) and  !empty( $cache[$artistname]['toptracks'] ) ) {
+				return $cache[$artistname]['toptracks'];
+			}
+			// fake an track containing the error information.
+			return array( array('name' 		=> 'Last.fm ERROR: '.$root->firstChild->nodeValue ) );
+		} else {
+			// seems everything is ok, shift the root to get the raw data
+			$root = $root->firstChild;
 		}
 		
-		update_option(LFM_US_CACHE, $cached_events);
+		// Create an object we can cache, including a modified time so we know when it goes out of date
+		if ( !isset( $cache ) ) {
+			$cache = array( $artistname => array( 'toptracks' => array( 'modified_timestamp' => time() ) ) );
+		} else if (!isset( $cache[$artistname] ) ){
+			$cache [ $artistname ] = array( 'toptracks' => array( 'modified_timestamp' => time() ) );
+		} else if (!isset( $cache[$artistname]['toptracks'] ) ) {
+			$cache [ $artistname ][ 'toptracks' ] = array( 'modified_timestamp' => time() );
+		}
 	
-		return $cached_events[$artistname]['events'];
+		// Create a reference for ease
+		$tracks = & $cache[$artistname]['toptracks'];
+
+		foreach ( $root->childNodes as $key => $trackNode) {
+			$tracks[$key] = $this->parse_toptrack( $trackNode );
+		}
+		// update cache
+		update_option(LFM_US_CACHE, $cache);
+		
+		// return events
+		return $cache[$artistname]['toptracks'];
+	}
+
+	function parse_toptrack($trackNode)
+	{
+		// A nice clean array of information
+		$track= array();
+		// get rank attrinute
+		$track['rank'] = $trackNode->attributes->getNamedItem( "rank" )->nodeValue;
+		
+		// Go through the childnodes and extract the information
+		foreach ($trackNode->childNodes as $currentNode) {
+			switch ($currentNode->nodeName) {
+			// artist is nested and will be ignored
+			case 'artist':
+				break;
+			case 'streamable':
+				$track['full_streamable'] = $currentNode->attributes->getNamedItem( "fulltrack" )->nodeValue;
+				$track['streamable'] = $currentNode->nodeValue;				
+				break;
+
+			/* Default will work for:
+				name
+				playcount
+				mbid
+				url
+				image
+			*/
+			default:
+				$track[$currentNode->nodeName] = $currentNode->nodeValue;
+				break;
+			}
+		}
+		return $track;
 	}
 
 	function parse_event($eventNode)
@@ -531,13 +665,44 @@ class LastFmForArtists {
 		return $event_string;
 	}
 
+	function expand_lastfm_toptrack_tags($format_string, $track = array(), $specials = array(), $recursed = false)
+	{
+		$track_string = $format_string;
+					
+	// since v0.6
+		$track_string = str_replace( '%NAME%', 				$track['name'],															$track_string );
+		$track_string = str_replace( '%RANK%', 				$track['rank'], 														$track_string );
+		$track_string = str_replace( '%PLAYCOUNT%',			$track['playcount'],													$track_string );
+		$track_string = str_replace( '%TRACK-MBID%', 		$track['mbid'], 														$track_string );
+		$track_string = str_replace( '%URL%', 				$track['url'], 															$track_string );
+		// special, because recursion occurs, but restrict single recursion
+		if ( !$recursed and preg_match_all( '/%IF-STREAMABLE%(.*)%END-IF%/sU', $track_string, $matches, PREG_SET_ORDER ) >= 1) {
+			foreach( $matches as $match ) {
+				$sub_string = ($track['streamable'] ? $this->expand_lastfm_toptrack_tags( $match[1], $track, $specials, true ) : '' );
+				$track_string = str_replace( $match[0], 	$sub_string, 															$track_string );
+			}
+		}
+		// special, because recursion occurs, but restrict single recursion
+		if ( !$recursed and preg_match_all( '/%IF-FULL-STREAMABLE%(.*)%END-IF%/sU', $track_string, $matches, PREG_SET_ORDER ) >= 1) {
+			foreach( $matches as $match ) {
+				$sub_string = ($track['full_streamable'] ? $this->expand_lastfm_toptrack_tags( $match[1], $track, $specials, true ) : '' );
+				$track_string = str_replace( $match[0],		$sub_string, 															$track_string );
+			}
+		}
+		$track_string = str_replace( '%IMAGE-URL%', 		$track['image'],														$track_string );
+		$track_string = str_replace( '%ARTIST-URL%', 		$specials['ARTIST-URL'],												$track_string );
+		$track_string = str_replace( '%NUMBER-OF-TRACKS%',	$specials['NUMBER-OF-TRACKS'],											$track_string );
+		$track_string = str_replace( '%NUMBER%',			$specials['NUMBER'],													$track_string );
+		return $track_string;
+	}
+
 	// Display Last.fm events.
 	function write_events($events, $artistname , $num , $pre_format_string,	$format_string, $post_format_string )
 	{
-	
+		// Minimum 1
 		if ($num <= 0) $num = 1;
 		// Max 100 events
-		if ($num > 50) $num = 50;
+		if ($num > 100) $num = 100;
 		
 		if ($artistname == '') {
 			// MISSING ARTISTNAME !!!
@@ -548,10 +713,13 @@ class LastFmForArtists {
 			} else {
 				// prepare global special tags.
 				$specials = array ( 'NUMBER-OF-EVENTS' 	=> sizeof($events), 
-									'ARTIST-URL' 		=> "http://".__('www.lastfm.de', LFM_US_DOMAIN)."/music/$artistname/+events/"
+									'ARTIST-URL' 		=> "http://".__('www.last.fm', LFM_US_DOMAIN)."/music/$artistname/+events/"
 								);
 				echo $this->expand_lastfm_event_tags( $pre_format_string, $events[0], $specials );
 				foreach ( $events as $counter => $event ) {
+					// ignore meta
+					if ($counter  === 'modified_timestamp') continue;
+
 					// prepare event-specials
 					$specials['NUMBER'] = $counter;
 	
@@ -559,10 +727,49 @@ class LastFmForArtists {
 					echo $this->expand_lastfm_event_tags( $format_string, $event, $specials );				
 					
 					// break loop if max events are reached.
-					if ( $counter >= $num ) break;
+					if ( $counter >= $num-1 ) break;
 				}
 				// specials are already of last event
-				echo $this->expand_lastfm_event_tags( $post_format_string, $events[sizeof($events)], $specials );
+				echo $this->expand_lastfm_event_tags( $post_format_string, $event, $specials );
+			}
+		}
+	}
+	
+	// Display Last.fm top tracks.
+	function write_toptracks($toptracks, $artistname , $num , $pre_format_string,	$format_string, $post_format_string )
+	{
+	
+		if ($num <= 0) $num = 1;
+		// Max 50 tracks
+		if ($num > 50) $num = 50;
+		
+		if ($artistname == '') {
+			// MISSING ARTISTNAME !!!
+			echo '<p style="'.LFM_US_ALERT_STYLE.'"><strong>'.__( 'You need to set a Last.FM artistname!', LFM_US_DOMAIN ).'</strong>'.__('Edit the widget settings to add it.', LFM_US_DOMAIN).'</p>';
+		} else {
+			if ( empty($toptracks) ) {
+				echo '<p><em>'.__( 'No tracks found.', LFM_US_DOMAIN ).'</em></p>';
+			} else {
+				// prepare global special tags.
+				$specials = array ( 'NUMBER-OF-TRACKS' 	=> sizeof($toptracks), 
+									'ARTIST-URL' 		=> "http://".__('www.last.fm', LFM_US_DOMAIN)."/music/$artistname/"
+								);
+				echo $this->expand_lastfm_toptrack_tags( $pre_format_string, $toptracks[0], $specials );
+				foreach ( $toptracks as $counter => $toptrack ) {
+					// ignore meta
+					if ($counter  === 'modified_timestamp') continue;
+					
+					// prepare event-specials					
+					$specials['NUMBER'] = $counter;
+	
+					// expand and output format-string
+					echo $this->expand_lastfm_toptrack_tags( $format_string, $toptrack, $specials );				
+					
+					// break loop if max events are reached.
+					if ( $counter >= $num-1 ) break;
+				}
+				// specials are already of last event
+				echo $this->expand_lastfm_toptrack_tags( $post_format_string, $toptrack, $specials );
 			}
 		}
 	}
