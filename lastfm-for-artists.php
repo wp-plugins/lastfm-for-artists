@@ -1,13 +1,13 @@
 <?php
 /*
 Plugin Name: Last.FM for Artists
-Version: 0.6
-Plugin URI: http://www.jek-source.net
-Description: Loads the events of an artist and displays them on your blog. Uses Last.FMs REST 2.0 APIs. Loosely based on Simon Wheatley Last.FM Events plugin. 
+Version: 0.6.1
+Plugin URI: http://www.brain-jek.de/wordpress/lastfm-for-artists/
+Description: Loads data of an artist and displays it on your blog. Uses Last.FMs REST 2.0 APIs. Loosely based on Simon Wheatley Last.FM Events plugin. 
 Author: J.org
-Author URI: http://www.jek-source.net
+Author URI: http://www.brain-jek.de
 
-Copyright 2008 J&ouml;rg Eichhorn.
+Copyright 2009 J&ouml;rg Eichhorn.
 
 This script is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -81,9 +81,15 @@ class LastFmForArtists {
 		// this adds a little css and ajvascript to the admin widget page allowing for neat css-tooltips and some more style.
 		add_action( 'admin_head', array( &$this, 'lfm4a_admin_head' ) );
 
+		// Run our widget initialization code
+		add_action( 'widgets_init', array( &$this, 'lfm4a_init_widgets') );
+
 		// register the cache-deleter
 		register_deactivation_hook( __FILE__, array( &$this, 'delete_cache') );
-
+		
+		// register the all deleting uninstallation procedure (includes cache-deletion)
+		if ( function_exists('register_uninstall_hook') )
+			register_uninstall_hook( __FILE__, array( &$this, 'uninstall'));
 	}
 	
 		// lastfm widget stuff
@@ -93,7 +99,7 @@ class LastFmForArtists {
 		
         if ( !is_array($options) ) $options = array();
  
-        $widget_ops = array( 'classname' => LFM_US_OPTIONS,  'description' => __('Last.fm Widget for Artists') );
+        $widget_ops = array( 'classname' => LFM_US_OPTIONS,  'description' => __('Last.fm Widget for Artists', LFM_US_DOMAIN));
         $control_ops = array( 'width' => 400, 'height' => 350, 'id_base' => 'lfm_fa' );
         $name = 'Last.fm';
  
@@ -113,6 +119,9 @@ class LastFmForArtists {
             wp_register_sidebar_widget( 'lfm_fa-1', $name, array( &$this, 'lfm4a_widget' ), $widget_ops, array( 'number' => -1 ) );
             wp_register_widget_control( 'lfm_fa-1', $name, array( &$this, 'lfm4a_widget_ctrl' ), $control_ops, array( 'number' => -1 ) );
         }	
+		// needed for widget options
+        wp_enqueue_script( 'thickbox' );
+		wp_enqueue_style( 'thickbox' );
 	}
 
 	// this funtion outputs the widget (or not...)
@@ -278,7 +287,10 @@ class LastFmForArtists {
 	// this function will delete _all_ options
 	function delete_cache() {
 		delete_option( LFM_US_CACHE );
-		// comment that for remembering options on re-activating
+	}
+	
+	function uninstall() {
+		$this->delete_cache();	
 		delete_option( LFM_US_OPTIONS );
 	}
 
@@ -847,7 +859,4 @@ class LastFmForArtists {
 
 // construct an instance of the plugin
 $lfm4a = new LastFmForArtists();
-// Run our widget initialization code
-add_action( 'widgets_init', array( $lfm4a, 'lfm4a_init_widgets') );
-
 ?>
