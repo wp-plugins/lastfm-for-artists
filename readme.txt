@@ -20,6 +20,7 @@ Current features:
 Please let me know about bugs and improper translations you may encounter.
 
 For a changelog see [here](http://www.brain-jek.de/wordpress/lastfm-for-artists/ "Plugin Website")
+Current [release notes](http://www.brain-jek.de/2009/release-lastfm-for-artists-061/ "0.6.1 release notes")
 
 == Screenshots ==
 1. Left: A simple <ul> list of the upcoming events. Middle-top: More sophisticated, a GoogleMaps mash-up displaying the tour. Middle-bottom: new in v0.6, display an artists top tracks. Right: The widget options.
