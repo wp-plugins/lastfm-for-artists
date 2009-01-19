@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Last.FM for Artists
-Version: 0.6.1
+Version: 0.6.2
 Plugin URI: http://www.brain-jek.de/wordpress/lastfm-for-artists/
 Description: Loads data of an artist and displays it on your blog. Uses Last.FMs REST 2.0 APIs. Loosely based on Simon Wheatley Last.FM Events plugin. 
 Author: J.org
@@ -120,8 +120,10 @@ class LastFmForArtists {
             wp_register_widget_control( 'lfm_fa-1', $name, array( &$this, 'lfm4a_widget_ctrl' ), $control_ops, array( 'number' => -1 ) );
         }	
 		// needed for widget options
-        wp_enqueue_script( 'thickbox' );
-		wp_enqueue_style( 'thickbox' );
+		if (is_admin()) {
+        	wp_enqueue_script( 'thickbox' );
+			wp_enqueue_style( 'thickbox' );
+		}
 	}
 
 	// this funtion outputs the widget (or not...)

@@ -3,7 +3,7 @@ Contributors: j.org
 Tags: lastfm, events, gigs, charts, top, concerts, music, widget, sidebar, REST, calendar
 Requires at least: 2.3
 Tested up to: 2.7
-Stable Tag: 0.6.1
+Stable Tag: 0.6.2
 
 This plugin adds a widget to show an artists event and/or charts data from Last.FM. Comes with FULL customization.
 
@@ -19,8 +19,7 @@ Current features:
 
 Please let me know about bugs and improper translations you may encounter.
 
-For a changelog see [here](http://www.brain-jek.de/wordpress/lastfm-for-artists/ "Plugin Website")
-Current [release notes](http://www.brain-jek.de/2009/release-lastfm-for-artists-061/ "0.6.1 release notes")
+[changelog](http://www.brain-jek.de/wordpress/lastfm-for-artists/ "Plugin Website") | [previous release notes](http://www.brain-jek.de/2009/release-lastfm-for-artists-061/ "0.6.1 release notes")
 
 == Screenshots ==
 1. Left: A simple <ul> list of the upcoming events. Middle-top: More sophisticated, a GoogleMaps mash-up displaying the tour. Middle-bottom: new in v0.6, display an artists top tracks. Right: The widget options.
