@@ -32,7 +32,7 @@ load_plugin_textdomain(LFM_US_DOMAIN, PLUGINDIR.'/'.dirname(plugin_basename(__FI
 // You can edit this, but I don't suggest making it too often
 define('LFM_US_CACHE_AGE_EVENTS', 60 * 60); // In seconds, so this is 1 hour (60 minutes). No need to check more frequently than this.
 define('LFM_US_CACHE_AGE_TOPTRACKS', 60 * 60 * 24 * 7); // In seconds, so this is 1 week (60 minutes). No need to check more frequently than this.
-define('LFM_US_CACHE', 'lfm_fa_cached_events');
+define('LFM_US_CACHE', 'lfm_fa_cache');
 define('LFM_US_OPTIONS', 'lfm_fa_widget');
 
 define('LFM_US_DEFAULT_TITLE', __('Upcoming shows', LFM_US_DOMAIN));
@@ -47,6 +47,297 @@ define('LFM_US_FETCH_TIME_OUT', 5); // 5 second timeout, Last.FM can be slow
 // Use gzip encoding to fetch remote files if supported?
 define('LFM_US_USE_GZIP', true);
 
+$lfmfa_default_options = array(
+					'type'				=> 1, // 1 means events.
+					'title'				=> LFM_US_DEFAULT_TITLE, 
+					'artistname'		=> LFM_US_DEFAULT_ARTIST, 
+					'num'				=> '5',
+					'examples'			=> array( // examples[<type>]['name][<formatstring>]
+							1 => array(
+								'Default' => array(
+									0	=>
+'<style type="text/css">
+<!--
+a.lfmfa-link {
+	position:relative;
+}
+a .lfmfa_tooltip1 {
+	display: none;
+	color: #CCC;
+	background-color:#000;
+	z-index:1;
+	width:250px;
+	position: absolute;
+	top: 45px;
+	left: 80px;
+	border: 1px solid #AAA;
+	-moz-border-radius: 5px;
+	text-decoration: none;
+	padding: 3px;
+	margin: 0px;
+} 
+a:hover .lfmfa_tooltip1 {
+	display: block;
+	opacity: .9;
+	filter: alpha(opacity=90);
+}
+-->
+</style>
+<div class="lfm_countdown">%COUNTDOWN%:</div>
+<ul>',
+									1	=> 
+'<li>
+<a target="_blank" class="url summary lastfm-event-%NUMBER% lfmfa-link" href="%URL%"><span class="lfmfa_tooltip1">
+	<strong>%TITLE%</strong><br />%DESCRIPTION%</span>
+<strong>%DATE%</strong><br/>
+%LOCATION-SUMMARY%
+</a>
+</li>',
+									2	=>
+'</ul>
+<p class="lastfm-profile">(powered by <a href="%ARTIST-URL%" target="_blank">Last.fm</a> | <a href="http://www.brain-jek.de" target="_blank">j:org</a>)</p>',
+									'name' => __('Default', LFM_US_DOMAIN)						
+								),
+								'Default_title' => array(
+									0	=>
+'<style type="text/css">
+<!--
+a.lfmfa-link {
+	position:relative;
+}
+a .lfmfa_tooltip2 {
+	display: none;
+	color: #CCC;
+	background-color:#000;
+	z-index:1;
+	width:250px;
+	position: absolute;
+	top: 45px;
+	left: 80px;
+	border: 1px solid #AAA;
+	-moz-border-radius: 5px;
+	text-decoration: none;
+	padding: 3px;
+	margin: 0px;
+} 
+a:hover .lfmfa_tooltip2 {
+	display: block;
+	opacity: .9;
+	filter: alpha(opacity=90);
+}
+-->
+</style>
+<div class="lfm_countdown">%COUNTDOWN%:</div>
+<ul>',
+									1	=> 
+'<li>
+<a target="_blank" class="url summary lastfm-event-%NUMBER% lfmfa-link" href="%URL%"><span class="lfmfa_tooltip2">
+	<strong>%LOCATION-SUMMARY%</strong><br />%DESCRIPTION%</span>
+<strong>%DATE%</strong><br/>
+%TITLE%
+</a>
+</li>',
+									2	=>
+'</ul>
+<p class="lastfm-profile">(powered by <a href="%ARTIST-URL%" target="_blank">Last.fm</a> | <a href="http://www.brain-jek.de" target="_blank">j:org</a>)</p>',						
+									'name' => __('Default/Title', LFM_US_DOMAIN)						
+									),
+								'Default_artist' => array(
+									0	=>
+'<style type="text/css">
+<!--
+a.lfmfa-link {
+	position:relative;
+}
+a .lfmfa_tooltip3 {
+	display: none;
+	color: #CCC;
+	background-color:#000;
+	z-index:1;
+	width:250px;
+	position: absolute;
+	top: 45px;
+	left: 80px;
+	border: 1px solid #AAA;
+	-moz-border-radius: 5px;
+	text-decoration: none;
+	padding: 3px;
+	margin: 0px;
+} 
+a:hover .lfmfa_tooltip3 {
+	display: block;
+	opacity: .9;
+	filter: alpha(opacity=90);
+}
+-->
+</style>
+<div class="lfm_countdown">%COUNTDOWN%:</div>
+<ul>',
+									1	=> 
+'<li>
+<a target="_blank" class="url summary lastfm-event-%NUMBER% lfmfa-link" href="%URL%"><span class="lfmfa_tooltip3">
+	<strong>%TITLE%</strong><br />%DESCRIPTION%</span>
+<strong>%DATE%</strong><br/>
+'.__('with', LFM_US_DOMAIN).' %ARTISTS%
+</a>
+</li>',
+									2	=>
+'</ul>
+<p class="lastfm-profile">(powered by <a href="%ARTIST-URL%" target="_blank">Last.fm</a> | <a href="http://www.brain-jek.de" target="_blank">j:org</a>)</p>',						
+									'name' => __('Default/Artists', LFM_US_DOMAIN)						
+									),																
+								'GoogleMap1' => array(
+									0	=>
+'<div id="map_canvas" style="width: 100%; height: 200px; overflow:hidden"></div>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=%VARIABLE:GOOGLE-MAPS-API-KEY:%" type="text/javascript"></script>
+<script type="text/javascript">
+function loadTourMap () {
+if (GBrowserIsCompatible()) {
+  var map = new GMap2(document.getElementById("map_canvas"));
+  map.setCenter(new GLatLng(%LOCATION-LATITUDE%, %LOCATION-LONGITUDE%));
+  map.setMapType(G_HYBRID_MAP);
+  var bounds = new GLatLngBounds();
+  var latLng;',
+									1	=> 
+"  latLng = new GLatLng(%LOCATION-LATITUDE%, %LOCATION-LONGITUDE%);
+  bounds.extend(latLng);
+  map.addOverlay(new GMarker(latLng, {title:\"%DATE%: %LOCATION-SUMMARY%\"}));",
+									2	=>
+'  map.setCenter(bounds.getCenter());
+  map.setZoom(map.getBoundsZoomLevel(bounds));
+  map.addControl(new GSmallZoomControl());  
+}
+};
+document.body.onLoad = loadTourMap();
+</script>',
+									'name' => __('GoogleMap Markers', LFM_US_DOMAIN)
+								),
+								'GoogleMap2' => array(
+									0 =>
+'<div id="map_canvas2" style="width: 100%; height: 200px; overflow:hidden"></div>
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=%VARIABLE:GOOGLE-MAPS-API-KEY:%" type="text/javascript"></script>
+<script type="text/javascript">
+function loadTourMap2 () {
+if (GBrowserIsCompatible()) {
+  var map = new GMap2(document.getElementById("map_canvas2"));
+  map.setCenter(new GLatLng(%LOCATION-LATITUDE%, %LOCATION-LONGITUDE%));
+  map.setMapType(G_HYBRID_MAP);
+  var bounds = new GLatLngBounds();
+  var latLng;
+  var linePoints = new Array();
+  latLng = new GLatLng(%LOCATION-LATITUDE%, %LOCATION-LONGITUDE%);
+  map.addOverlay(new GMarker(latLng, {title:"%DATE%: %LOCATION-SUMMARY%"}));',
+									1 =>
+'  latLng = new GLatLng(%LOCATION-LATITUDE%, %LOCATION-LONGITUDE%);
+  bounds.extend(latLng);
+  linePoints[linePoints.length] = latLng;',
+									2 =>
+'  var polyline = new GPolyline(linePoints, "#ff0000", 2);
+  map.addOverlay(new GMarker(latLng, {title:"%DATE%: %LOCATION-SUMMARY%"}));
+  map.addOverlay(polyline);
+  map.setCenter(bounds.getCenter());
+  map.setZoom(map.getBoundsZoomLevel(bounds));
+  map.addControl(new GSmallZoomControl());  
+}
+};
+document.body.onLoad = loadTourMap2();
+</script>',
+									'name' => __('GoogleMap Tourline', LFM_US_DOMAIN)
+								)
+							),
+							2 => array(
+								'Default' => array(
+									0 => 
+'<style type="text/css">
+<!--
+a.lfmfa-link {
+	position:relative;
+}
+a .lfmfa_tooltip4 {
+	display: none;
+	color: #CCC;
+	background-color:#000;
+	z-index:1;
+	width:150px;
+	position: absolute;
+	top: 45px;
+	left: 80px;
+	border: 1px solid #AAA;
+	-moz-border-radius: 5px;
+	text-decoration: none;
+	padding: 3px;
+	margin: 0px;
+} 
+a:hover .lfmfa_tooltip4 {
+	display: block;
+	opacity: .9;
+	filter: alpha(opacity=90);
+}
+-->
+</style>
+<ul>',
+									1 =>
+'<li>
+<a target="_blank" class="url summary lastfm-track-%RANK% lfmfa-link" href="%URL%%IF-FULL-STREAMABLE%?autostart%END-IF%"><span class="lfmfa_tooltip4">
+	<strong>Played %PLAYCOUNT% times!</strong><br />
+	<img src="%IMAGE-URL%"></span>
+<strong>%RANK%.</strong> %NAME%</a>
+</li>',
+									2 =>
+'</ul>
+<p class="lastfm-profile">(powered by <a href="%ARTIST-URL%" target="_blank">Last.fm</a> | <a href="http://www.brain-jek.de" target="_blank">j:org</a>)</p>',
+									'name' => __('Default', LFM_US_DOMAIN)
+								),
+								'Default_ol' => array(
+									0 => 
+'<style type="text/css">
+<!--
+a.lfmfa-link {
+	position:relative;
+}
+a .lfmfa_tooltip4 {
+	display: none;
+	color: #CCC;
+	background-color:#000;
+	z-index:1;
+	width:150px;
+	position: absolute;
+	top: 45px;
+	left: 80px;
+	border: 1px solid #AAA;
+	-moz-border-radius: 5px;
+	text-decoration: none;
+	padding: 3px;
+	margin: 0px;
+} 
+a:hover .lfmfa_tooltip4 {
+	display: block;
+	opacity: .9;
+	filter: alpha(opacity=90);
+}
+-->
+</style>
+<ol>',
+									1 =>
+'<li>
+<a target="_blank" class="url summary lastfm-track-%RANK% lfmfa-link" href="%URL%%IF-FULL-STREAMABLE%?autostart%END-IF%"><span class="lfmfa_tooltip4">
+	<strong>Played %PLAYCOUNT% times!</strong><br />
+	<img src="%IMAGE-URL%"></span>
+	%NAME%</a>
+</li>',
+									2 =>
+'</ol>
+<p class="lastfm-profile">(powered by <a href="%ARTIST-URL%" target="_blank">Last.fm</a> | <a href="http://www.brain-jek.de" target="_blank">j:org</a>)</p>',
+									'name' => __('Default/Ordered', LFM_US_DOMAIN)
+								),
+								
+							),
+					),
+					'hide_on_empty'		=>true,
+					'test_run' 			=>false
+				);
+
+
 // DEBUGGING via firephp, which I recommend btw.
 //require('fb.php');
 //ob_start();
@@ -56,24 +347,6 @@ require_once(ABSPATH . WPINC . '/class-snoopy.php');
 
 class LastFmForArtists {
 	// widget defaults.
-	var $default_options = array(
-					'type'				=> 1, // 1 means events.
-					'title'				=> LFM_US_DEFAULT_TITLE, 
-					'artistname'		=> LFM_US_DEFAULT_ARTIST, 
-					'num'				=> '5', 
-					'pre_format_string' => '<div class="lfm_countdown">%COUNTDOWN%:</div><ul>',
-					'format_string'		=> 
-'<li>
-<a target="_blank" class="url summary lastfm-event-%NUMBER%" href="%URL%"><span style="display:none">
-<strong>%TITLE%</strong><br />%DESCRIPTION%</span>
-<strong>%DATE%</strong><br/>
-%LOCATION-SUMMARY%
-</a>
-</li>',
-					'post_format_string'=> '</ul><p class="lastfm-profile">(powered by <a href="%ARTIST-URL%" target="_blank">Last.fm</a> | <a href="http://www.jek-source.net" target="_blank">j:org</a>)</p>',
-					'hide_on_empty'		=>true,
-					'test_run' 			=>false
-				);
 	
 	// the constructor, plugin-initializer
 	function LastFmForArtists()
@@ -87,12 +360,33 @@ class LastFmForArtists {
 		// register the cache-deleter
 		register_deactivation_hook( __FILE__, array( &$this, 'delete_cache') );
 		
-		// register the all deleting uninstallation procedure (includes cache-deletion)
-		if ( function_exists('register_uninstall_hook') )
-			register_uninstall_hook( __FILE__, array( &$this, 'uninstall'));
+		// copy default example
+		$default_options['pre_format_string'] 	= $default_options['examples'][$default_options['type']]['Default'][0];
+		$default_options['format_string'] 		= $default_options['examples'][$default_options['type']]['Default'][1];
+		$default_options['post_format_string'] 	= $default_options['examples'][$default_options['type']]['Default'][2];		
 	}
 	
-		// lastfm widget stuff
+	// helper to clean format string before replacements
+	function sanitize_formatstring($formatstring) {
+		// replace single quotes with double quotes
+		$result = $formatstring;
+		//$result = preg_replace("/'/", '"', $formatstring);
+		// variable syntax in format strings is %VARIABlE:variable-name:variable-value%
+		// delete variables-declaration from format-strings, needed to actually work with an variables value
+		$result = preg_replace('/%VARIABLE:([^%]):([^%])%/', '${2}', $formatstring);
+		return $result;		
+	}
+	
+	// simple helper to ease comparison of examples and used format strings 
+	function equalize_formatString($formatstring) {
+		// trim variable declarations
+		$result = preg_replace('/%VARIABLE:([^%:]+):([^%]*)%/', '', $formatstring);
+		// trim all whitespaces
+		$result = preg_replace('/\s/', '', $result);
+		return $result;
+	}
+	
+	// lastfm widget stuff
 	function lfm4a_init_widgets()
 	{
 		$options = get_option( LFM_US_OPTIONS );
@@ -193,10 +487,10 @@ class LastFmForArtists {
 		
 		switch ($type) {
 			case 1:
-				$this->write_events($items, $artistname, $num, $pre_format_string, $format_string, $post_format_string);	
+				$this->write_events($items, $artistname, $num, $this->sanitize_formatstring($pre_format_string), $this->sanitize_formatstring($format_string), $this->sanitize_formatstring($post_format_string));	
 				break;
 			case 2:
-				$this->write_toptracks($items, $artistname, $num, $pre_format_string, $format_string, $post_format_string);	
+				$this->write_toptracks($items, $artistname, $num, $this->sanitize_formatstring($pre_format_string), $this->sanitize_formatstring($format_string), $this->sanitize_formatstring($post_format_string));	
 				break;
 		}
 		echo $after_widget;
@@ -256,7 +550,7 @@ class LastFmForArtists {
 
         if (-1 == $number) {
             $number = '%i%';
-            $values = $this->default_options;
+            $values = $GLOBALS['lfmfa_default_options'];
         }
         else {
             $values = $options_all[$number];
@@ -273,29 +567,38 @@ class LastFmForArtists {
 		$hide_on_empty_checked = ($values['hide_on_empty']) ? 'checked="checked"' : '';
 		$test_run = ($values['test_run']) ? 'checked="checked"' : '';
 		
+		$examples = $GLOBALS['lfmfa_default_options']['examples'];
         include("lastfm-for-artists-form.php");
 	}
 	
 	// this outputs our stylesheet and javascript for the admin section.
 	function lfm4a_admin_head()
 	{
+		// only print our code if it's required
 		if ( strpos($_SERVER['REQUEST_URI'], 'widgets.php') !== false) {
 			$url = get_settings( 'siteurl' );
 			$url = $url . '/wp-content/plugins/lastfm-for-artists/';
 			echo '<link rel="stylesheet" type="text/css" href="' . $url . 'lastfm-for-artists-admin.css" />';
+			echo '
+<script type="text/javascript">
+	var lastfmFaDefaults = '.json_encode($GLOBALS['lfmfa_default_options']['examples']).';
+	var lastfmFaExOptionsStrings = {';
+			foreach ($GLOBALS['lfmfa_default_options']['examples'] as $type => $examplesPerType) {
+				echo '"'.$type.'":"<option selected=\"selected\" value=\"\">'.__('Custom', LFM_US_DOMAIN); // none
+				foreach ($examplesPerType as $exName => $exStrings) {
+					echo '<option value=\"'.$exName.'\">'.$exStrings['name'];
+				}
+				echo '",';
+			}
+			echo '};</script>';
 			echo '<script type="text/javascript" src="' . $url . 'lastfm-for-artists-admin.js"></script>';
 		}
 	}
-	// this function will delete _all_ options
+	// this function will delete the cache
 	function delete_cache() {
 		delete_option( LFM_US_CACHE );
 	}
 	
-	function uninstall() {
-		$this->delete_cache();	
-		delete_option( LFM_US_OPTIONS );
-	}
-
 	// Modelled on the Magpie function of a similar name
 	function fetch_remote_file ( $url )
 	{
@@ -394,10 +697,13 @@ class LastFmForArtists {
 		
 		// Create an object we can cache, including a modified time so we know when it goes out of date
 		if ( !isset( $cache ) ) {
+			// completely renew the cache object
 			$cache = array( $artistname => array( 'events' => array( 'modified_timestamp' => time() ) ) );
 		} else if (!isset( $cache[$artistname] ) ) {
+			// create a cache for the used artist
 			$cache [ $artistname ] = array( 'events' => array( 'modified_timestamp' => time() ) );
-		} else if (!isset( $cache[$artistname]['events'] ) ){
+		} else {
+			// create a cache for this artists events
 			$cache [ $artistname ][ 'events' ] = array( 'modified_timestamp' => time() );
 		}
 	
@@ -475,10 +781,13 @@ class LastFmForArtists {
 		
 		// Create an object we can cache, including a modified time so we know when it goes out of date
 		if ( !isset( $cache ) ) {
+			// create a complete and new cache
 			$cache = array( $artistname => array( 'toptracks' => array( 'modified_timestamp' => time() ) ) );
 		} else if (!isset( $cache[$artistname] ) ){
+			// create an artist-specific cache
 			$cache [ $artistname ] = array( 'toptracks' => array( 'modified_timestamp' => time() ) );
-		} else if (!isset( $cache[$artistname]['toptracks'] ) ) {
+		} else {
+			// create/overwrite cache for this artists tracks
 			$cache [ $artistname ][ 'toptracks' ] = array( 'modified_timestamp' => time() );
 		}
 	

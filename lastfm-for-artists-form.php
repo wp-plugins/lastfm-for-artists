@@ -5,11 +5,28 @@
     	<input style="width: 200px;" id="lfmfa_<?php echo $number; ?>_artistname" name="widget_lfm_fa[<?php echo $number; ?>][artistname]" type="text" value="<?php echo $artistname; ?>" />
     </label></p>
 	<p style="text-align:right;"><label for="lfm4a_<?php echo $number; ?>_artistname"><? _e('type of widget:', LFM_US_DOMAIN ); ?>
-		<select onchange="lastfm_fa_show_hide_tags(this);" name="widget_lfm_fa[<?php echo $number; ?>][type]" size="1">
+		<select class="type-selector" onchange="lastfm_fa_show_hide_tags(this);" name="widget_lfm_fa[<?php echo $number; ?>][type]" size="1">
 			<option  value="1"<?php echo ( $type == 1 ? ' selected="true"' : '');?>><?php _e( 'upcoming shows', LFM_US_DOMAIN); ?>
 			<option  value="2"<?php echo ( $type == 2 ? ' selected="true"' : '');?>><?php _e( 'top tracks', LFM_US_DOMAIN); ?>
         </select>
-    </label></p>
+    </label>
+	</p>
+    <p style="text-align:right;">
+    <label for="lfm4a_<?php echo $number; ?>_artistname"><? _e('Layout', LFM_US_DOMAIN ); ?>:
+		<select class="example-selector" onchange="lastfm_fa_chooseExample(this);" name="widget_lfm_fa[<?php echo $number; ?>][example]" size="1">
+			<option value=""><?php _e( 'Custom', LFM_US_DOMAIN); ?>
+		<?php 
+			foreach ($examples[$type] as $exName => $exStrings) {
+				$select_string = (	htmlentities($this->equalize_formatString($exStrings[0])) == $this->equalize_formatString($pre_format_string) 	&& 
+									htmlentities($this->equalize_formatString($exStrings[1])) == $this->equalize_formatString($format_string) 		&& 
+									htmlentities($this->equalize_formatString($exStrings[2]))  == $this->equalize_formatString($post_format_string) ) ?' selected="selected" ' : '' ;
+				echo '			<option value="'.$exName.'"'.$select_string.'>'.$exStrings['name'];
+			}
+		?>
+        </select>
+    </label>
+    <a title="<?php _e('Will be overriden on layout or type changes! Be sure to generate valid html!', LFM_US_DOMAIN)?>" onclick="tb_show(this.title,this.href,false); this.blur(); return false;" href="#TB_inline?height=500&width=750&inlineId=lfm4a_<?php echo $number; ?>_customizer" class="button"><?php _e('Customize', LFM_US_DOMAIN); ?></a>
+    </p>    
 	<p style="text-align:right;"><label for="lfm4a_<?php echo $number; ?>_hide_on_empty"><? _e('Hide this widget if there are no items:', LFM_US_DOMAIN ); ?>
 	    <input id="lfmfa_<?php echo $number; ?>_hide_on_empty" name="widget_lfm_fa[<?php echo $number; ?>][hide_on_empty]" type="checkbox" <?php echo $hide_on_empty_checked; ?> />
     </label></p>
@@ -19,8 +36,6 @@
 	<p style="text-align:right;"><label for="lfm4a_<?php echo $number; ?>_num"><? _e('Maximum number of items:', LFM_US_DOMAIN ); ?>
 	    <input style="width: 25px;" id="lfmfa_<?php echo $number; ?>a_num" name="widget_lfm_fa[<?php echo $number; ?>][num]" type="text" value="<?php echo $num; ?>" />
     </label></p>
-    <p style="text-align:right;"><a title="<?php _e('Advanced Customizations - be sure to generate valid html!', LFM_US_DOMAIN)?>" onclick="tb_show(this.title,this.href,false); this.blur(); return false;" href="#TB_inline?height=500&width=750&inlineId=lfm4a_<?php echo $number; ?>_customizer" class="button"><?php _e('Advanced Customizations', LFM_US_DOMAIN); ?></a>
-    </p>
 	<!-- customizer -->
 	<div id="lfm4a_<?php echo $number; ?>_customizer" style="display:none;">
 		<div class="tipped">
@@ -73,7 +88,7 @@
 			(*) <? _e('means the string is being pre-processed by the plugin.', LFM_US_DOMAIN); ?>
 		</div>
 		<p style="text-align:right;"><label for="lfm4a_<?php echo $number; ?>_pre_format_string"><? _e('The Format String serving as header of your list, available data is of the first item:', LFM_US_DOMAIN ); ?>
-	    	<textarea wrap="off" onFocus="lastfm_fa_resize_textareas(this);" style="width: 60%; height: 150px;" id="lfmfa_<?php echo $number; ?>_pre_format_string" name="widget_lfm_fa[<?php echo $number; ?>][pre_format_string]" cols="20" rows="7" class="widefat lfmfa-format-string"><?php echo $pre_format_string;?></textarea>
+	    	<textarea wrap="off" onFocus="lastfm_fa_resize_textareas(this);" style="width: 60%; height: 150px;" id="lfmfa_<?php echo $number; ?>_pre_format_string" name="widget_lfm_fa[<?php echo $number; ?>][pre_format_string]" cols="20" rows="7" class="widefat lfmfa-format-string open"><?php echo $pre_format_string;?></textarea>
 	    </label></p>
 		<p style="text-align:right;"><label for="lfm4a_<?php echo $number; ?>_format_string"><? _e('The Format String for one item:', LFM_US_DOMAIN ); ?>
 		    <textarea wrap="off" onFocus="lastfm_fa_resize_textareas(this);" style="width: 60%;" id="lfmfa_<?php echo $number; ?>_format_string" name="widget_lfm_fa[<?php echo $number; ?>][format_string]" cols="20" rows="7" class="widefat lfmfa-format-string"><?php echo $format_string; ?></textarea>

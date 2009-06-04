@@ -5,24 +5,29 @@ Requires at least: 2.3
 Tested up to: 2.7
 Stable Tag: 0.6.2
 
-This plugin adds a widget to show an artists event and/or charts data from Last.FM. Comes with FULL customization.
+This plugin adds a fully customizable sidebar-widget to list an artists upcoming shows or top tracks from Last.FM (using the new 2.0 REST API).
 
 == Description ==
-This plugin adds a widget to list an artists upcoming shows or your top tracks from Last.FM on your Wordpress blog (using the new 2.0 REST API).
+This plugin adds a sidebar-widget to list an artists upcoming shows or top tracks from Last.FM (using the new 2.0 REST API).
+
+**This plugin needs at least PHP 5.**
 
 Current features:
+
 * event listing
 * top track listing
 * multiple widgets the way they meant to be (add arbitrarily many widget instances to your sidebar)
-* complete customization of the list view possible via format strings and tags
+* comes with many pre-defined widget layouts
+* complete customization of widget layout possible via format strings and tags
 * I18n available: English, German. Add your own!
 
 Please let me know about bugs and improper translations you may encounter.
 
-[changelog](http://www.brain-jek.de/wordpress/lastfm-for-artists/ "Plugin Website") | [previous release notes](http://www.brain-jek.de/2009/release-lastfm-for-artists-061/ "0.6.1 release notes")
+* [release notes](http://www.brain-jek.de/2009/release-lastfm-for-artists-07/ "0.7 release notes")
+* [changelog and documentation](http://www.brain-jek.de/wordpress/lastfm-for-artists/ "Plugin Website")
 
 == Screenshots ==
-1. Left: A simple <ul> list of the upcoming events. Middle-top: More sophisticated, a GoogleMaps mash-up displaying the tour. Middle-bottom: new in v0.6, display an artists top tracks. Right: The widget options.
+1. Left: A simple unordered list of the upcoming events. Middle-top: More sophisticated, a GoogleMaps mash-up displaying the tour. Middle-bottom: display an artists top tracks. Right: The widget options.
 
 == Installation ==
 
