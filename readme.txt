@@ -1,8 +1,9 @@
 === Last.fm For Artists ===
 Contributors: j.org
+Donate link: http://www.brain-jek.de/
 Tags: lastfm, events, gigs, charts, top, concerts, music, widget, sidebar, REST, calendar
-Requires at least: 2.3
-Tested up to: 2.7
+Requires at least: 2.5
+Tested up to: 2.7.1
 Stable Tag: 0.6.2
 
 This plugin adds a fully customizable sidebar-widget to list an artists upcoming shows or top tracks from Last.FM (using the new 2.0 REST API).
@@ -10,7 +11,7 @@ This plugin adds a fully customizable sidebar-widget to list an artists upcoming
 == Description ==
 This plugin adds a sidebar-widget to list an artists upcoming shows or top tracks from Last.FM (using the new 2.0 REST API).
 
-**This plugin needs at least PHP 5.**
+**This plugin requires PHP 5.**
 
 Current features:
 
