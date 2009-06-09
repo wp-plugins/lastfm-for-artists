@@ -1,0 +1,409 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Last.fm upcoming shows 0.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-04-24 13:57+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: J:org A. Tekk <basser@7ieben.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: GERMANY\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+
+# Option name for widget title
+#: lastfm-for-artists-form.php:1
+msgid "Title:"
+msgstr "Titel:"
+
+#: lastfm-for-artists-form.php:4
+msgid "Artistname:"
+msgstr "Name des K&uuml;nstlers:"
+
+#: lastfm-for-artists-form.php:7
+msgid "type of widget:"
+msgstr "Widget-Typ"
+
+# default widget title
+#: lastfm-for-artists-form.php:9
+msgid "upcoming shows"
+msgstr "N&auml;chste Konzerte"
+
+#: lastfm-for-artists-form.php:10
+msgid "top tracks"
+msgstr "Charts"
+
+#: lastfm-for-artists-form.php:15
+msgid "Layout"
+msgstr "Layout"
+
+#: lastfm-for-artists-form.php:17
+#: lastfm-for-artists.php:587
+msgid "Custom"
+msgstr "Angepasst"
+
+#: lastfm-for-artists-form.php:28
+msgid "Will be overriden on layout or type changes! Be sure to generate valid html!"
+msgstr "Einstellungen werden bei Layout- oder Typ&auml;nderung &uuml;berschrieben! Achte darauf g&uuml;ltiges html zu erzeugen!"
+
+#: lastfm-for-artists-form.php:28
+msgid "Customize"
+msgstr "Anpassen"
+
+#: lastfm-for-artists-form.php:30
+msgid "Hide this widget if there are no items:"
+msgstr "Dieses Widget verbergen, falls keine Eintr&auml;ge existieren."
+
+#: lastfm-for-artists-form.php:33
+msgid "Enable testing mode (only logged-in users will see the widget):"
+msgstr "Aktiviere Test-Modus (nur eingeloggte Nutzer werden das Widget sehen):"
+
+#: lastfm-for-artists-form.php:36
+msgid "Maximum number of items:"
+msgstr "Maximale Anzahl der Eintr&auml;ge:"
+
+#: lastfm-for-artists-form.php:44
+msgid "The Last.fm webpage of the event. Equals to &quot;http://www.last.fm/event/%ID%&quot;"
+msgstr "Die Last.fm-Webseite des Konzerts. Ist identisch mit &quot;http://www.last.fm/event/%ID%&quot;."
+
+#: lastfm-for-artists-form.php:45
+msgid "The title of the event, may be equal to the headliner."
+msgstr "Der Titel des Konzerts, ist evtl. identisch mit dem Namen des Headliners."
+
+#: lastfm-for-artists-form.php:46
+msgid "A description, may be empty and may contain some html (currently only &lt;br&gt; is allowed)."
+msgstr "Die Beschreibung des Events, evtl. leer, kann HTML-Code enthalten (momentan nur &lt;br&gt; erlaubt)."
+
+#: lastfm-for-artists-form.php:47
+msgid "A comma-separated list of the artists playing at the event."
+msgstr "Eine komma-getrennte Aufzählung der K&uuml;nstler, die auf dem Konzert spielen."
+
+#: lastfm-for-artists-form.php:48
+msgid "The artist marked to be the headliner of the event. Also mentioned in %ARTISTS%."
+msgstr "Der Name des als Headliner markierten K&uuml;nstlers. Erscheint auch in %ARTISTS%."
+
+# In fact, the startdate of the multi-day format depends on a customizable date-format.
+#: lastfm-for-artists-form.php:49
+msgid "A convenient date, i.e. if a one-day event &quot;%STARTDATE% %STARTTIME%&quot;, else &quot;%STARTDATE%-%ENDDATE%&quot;."
+msgstr "Das angepasste Datum, d.h. bei eint&auml;gigen Events &quot;%STARTDATE% %STARTTIME%&quot;, ansonsten sowas wie &quot;%STARTDATE%-%ENDDATE%&quot;."
+
+#: lastfm-for-artists-form.php:50
+msgid "The date the event will begin."
+msgstr "Das Datum, an dem das Event beginnt."
+
+#: lastfm-for-artists-form.php:51
+msgid "The time the event will begin, may be empty."
+msgstr "Die Anfangszeit der Show, m&ouml;glicherweise leer."
+
+#: lastfm-for-artists-form.php:52
+msgid "The date the event will end."
+msgstr "Das Datum, an dem das Event endet."
+
+#: lastfm-for-artists-form.php:53
+msgid "The number of Last.fm users who said to attend the event."
+msgstr "Die Anzahl der Last.fm Benutzer, welche ihre Teilnahme zugesagt haben."
+
+#: lastfm-for-artists-form.php:54
+msgid "The number of reviews for this event, most likely to be 0 because only future events are listed."
+msgstr "Die Anzahl der Reviews der Show, h&ouml;chstwahrscheinlich 0, da nur zukünftige Events aufgelistet werden."
+
+#: lastfm-for-artists-form.php:55
+msgid "A convenient location summary, equals to &quot;%LOCATION-CITY%, %LOCATION-NAME%&quot;."
+msgstr "Eine angepasste Beschreibung der Location, ist gleich &quot;%LOCATION-CITY%, %LOCATION-NAME%&quot;."
+
+#: lastfm-for-artists-form.php:56
+msgid "The name of the venue."
+msgstr "Der Name der Location."
+
+#: lastfm-for-artists-form.php:57
+msgid "The Last.fm webpage of the venue."
+msgstr "Die URL zur Last.fm Webseite der Location."
+
+#: lastfm-for-artists-form.php:58
+msgid "The city the venue is located in."
+msgstr "Der Ort in welchem die Location sich befindet."
+
+#: lastfm-for-artists-form.php:59
+msgid "The country the city is located in. ;)"
+msgstr "Das Land, in dem sich der Ort befindet. ;)"
+
+#: lastfm-for-artists-form.php:60
+#: lastfm-for-artists-form.php:61
+msgid "The adress of the venue. May be empty."
+msgstr "Die Adresse der Location. M&ouml;glicherweise nicht angegeben."
+
+#: lastfm-for-artists-form.php:62
+msgid "The latitude of the location."
+msgstr "Der Breitengrad der Location."
+
+#: lastfm-for-artists-form.php:63
+msgid "The longitude of the location."
+msgstr "Der L&auml;ngengrad der Location."
+
+#: lastfm-for-artists-form.php:64
+msgid "The timezone the location is located in."
+msgstr "Die Zeitzone, inder die Location sich befindet."
+
+#: lastfm-for-artists-form.php:65
+msgid "The URL of the Last.fm image for the event, most likely the headliner."
+msgstr "Die URL zu einem Bild f&uuml;r das Event, h&ouml;chstwahrscheinlich ein Bild des Headliners."
+
+#: lastfm-for-artists-form.php:66
+msgid "The Last.fm tag for the event, equals to &quot;lastfm:event=%ID%&quot;."
+msgstr "Der Last.fm tag f&uuml;r das Event, ist gleich &quot;lastfm:event=%ID%&quot;."
+
+#: lastfm-for-artists-form.php:67
+msgid "The Last.fm id of the event."
+msgstr "Die Last.fm id des Events."
+
+#: lastfm-for-artists-form.php:68
+msgid "A countdown in months/weeks/days to this event."
+msgstr "Ein Countdown in Monaten/Wochen/Tagen bis zum Event."
+
+#: lastfm-for-artists-form.php:69
+msgid "The number of events delivered by Last.fm."
+msgstr "Die Gesamtanzahl der von Last.fm übermittelten Konzerte."
+
+#: lastfm-for-artists-form.php:70
+msgid "The number of the current event, starts at 0."
+msgstr "Die Nummer des Konzerts, beginnt bei 0."
+
+#: lastfm-for-artists-form.php:71
+msgid "The URL of the last.fm artists event page."
+msgstr "Die URL zur Last.fm-Webseite der Konzerte des K&uuml;nstler."
+
+#: lastfm-for-artists-form.php:75
+msgid "The name of the track."
+msgstr "Der Name des Titels."
+
+#: lastfm-for-artists-form.php:76
+msgid "The rank of the current track, most likely %NUMBER%+1."
+msgstr "Die Chartposition des Titels, h&ouml;chstwahrscheinlich gleich %NUMBER%+1."
+
+#: lastfm-for-artists-form.php:77
+msgid "How often this track has been played by last.fm users."
+msgstr "Wie oft dieser Titel bereits von Last.fm Nutzern gespielt wurde."
+
+#: lastfm-for-artists-form.php:78
+msgid "A URL of the last.fm page for this song. Concatenate &quot;?autostart&quot; to let the music play!"
+msgstr "Die URL zur Last.fm Webseite für diesen Titel. Wenn man &quot;?autostart&quot; an die URL anh&auml;ngt, startet der Player automatisch."
+
+#: lastfm-for-artists-form.php:79
+msgid "This is kind of special: replace &quot;...&quot; with any valid sub-formatstring and it only gets evaluated, if this track is marked &quot;streamable&quot; by Last.fm."
+msgstr "Spezialfeld: Ersetze die Punkte &quot;...&quot; mit einem beliebigen (Teil-) Formatierungs-String. Dieser wird nur dann ausgewertet, wenn der Titel von Last.fm als &quot;streambar&quot; markiert ist."
+
+#: lastfm-for-artists-form.php:80
+msgid "Same as above, but stronger: evaluation will only occur, if this track may be streamed full length."
+msgstr "Das gleiche wie oben, nur st&auml;rker: Der enthaltene Formatierungs-String wird nur ausgewertet, wenn der Titel in voller L&auml;nge gestreamt werden kann."
+
+#: lastfm-for-artists-form.php:81
+msgid "The Musicbrainz Track ID, may be empty."
+msgstr "Die Muscbrainz-Titel-ID, kann leer sein."
+
+#: lastfm-for-artists-form.php:82
+msgid "The URL of an image for the track, most likely the corresponding album art."
+msgstr "Die URL zu einem Bild f&uuml;r den Titel, h&ouml;chstwahrscheinlich ein Bild des zugehörigen Albumcovers."
+
+#: lastfm-for-artists-form.php:83
+msgid "The URL of the last.fm artist page."
+msgstr "Die URL zur K&uuml;nstler-Seite bei Last.fm."
+
+#: lastfm-for-artists-form.php:84
+msgid "The number of top-tracks delivered by Last.fm. (max. 50)"
+msgstr "Die Gesamtanzahl der von Last.fm übermittelten Chart-Titel. (max. 50)"
+
+#: lastfm-for-artists-form.php:85
+msgid "The number of the current track, starts at 0."
+msgstr "Die aktuelle Nummer des Titels, beginnt bei 0."
+
+#: lastfm-for-artists-form.php:88
+msgid "means the string is being pre-processed by the plugin."
+msgstr "bedeutet die Zeichenkette ist vom Plugin vorverarbeitet."
+
+#: lastfm-for-artists-form.php:90
+msgid "The Format String serving as header of your list, available data is of the first item:"
+msgstr "Der Formatierungs-String für den Kopf der Liste. Die verfügbaren Daten beziehen sich auf den ersten Eintrag:"
+
+#: lastfm-for-artists-form.php:93
+msgid "The Format String for one item:"
+msgstr "Der Formatierungs-String für einen Eintrag:"
+
+#: lastfm-for-artists-form.php:96
+msgid "The Format String serving as footer of your list, available data is of the last shown item:"
+msgstr "Der Formatierungs-String für die Fu&szlig;zeile der Liste. Die verfügbaren Daten beziehen sich auf den letzten gezeigten Eintrag:"
+
+# default widget title
+#: lastfm-for-artists.php:38
+msgid "Upcoming shows"
+msgstr "Nächste Konzerte"
+
+#: lastfm-for-artists.php:39
+msgid "7ieben"
+msgstr "7ieben"
+
+#: lastfm-for-artists.php:99
+#: lastfm-for-artists.php:289
+msgid "Default"
+msgstr "Standard"
+
+#: lastfm-for-artists.php:143
+msgid "Default/Title"
+msgstr "Standard/Titel"
+
+#: lastfm-for-artists.php:181
+msgid "with"
+msgstr "mit"
+
+#: lastfm-for-artists.php:187
+msgid "Default/Artists"
+msgstr "Standard/K&uuml;nstler"
+
+#: lastfm-for-artists.php:213
+msgid "GoogleMap Markers"
+msgstr "GoogleMap Markierungen"
+
+#: lastfm-for-artists.php:245
+msgid "GoogleMap Tourline"
+msgstr "GoogleMap Tour"
+
+#: lastfm-for-artists.php:331
+msgid "Default/Ordered"
+msgstr "Standard/Nummeriert"
+
+#: lastfm-for-artists.php:396
+msgid "Last.fm Widget for Artists"
+msgstr "Last.fm Widget für Künstler"
+
+# ERROR message if no events could be retrieved (neither new nor cached)
+#: lastfm-for-artists.php:479
+msgid "Could not retrieve data."
+msgstr "Konnte keine Daten abrufen."
+
+#: lastfm-for-artists.php:485
+msgid "This widget is only seen by logged-in users!"
+msgstr "Dieses Widget kann nur von eingeloggten Benutzern gesehen werden!"
+
+# The default date format. See http://www.php.net/manual/en/function.date.php for valid tags.
+#: lastfm-for-artists.php:943
+#: lastfm-for-artists.php:944
+#: lastfm-for-artists.php:963
+#: lastfm-for-artists.php:964
+msgid "%d.%m.%y"
+msgstr "%d.%m.%y"
+
+# This is for the %DATE% tag which shows (pseudo-code):
+# if (startdate != enddate) {
+# // in this case, startdate gets formatted using this pattern.
+# date = 'startdate' - 'enddate'
+# } else {
+# date = 'startdate';
+# }
+# if (starttime) {
+# date = date + 'starttime'
+# }
+# see http://www.php.net/manual/en/function.date.php for valid placeholders!
+#: lastfm-for-artists.php:947
+#, php-format
+msgid "%d."
+msgstr "%d."
+
+# The default time format. See http://www.php.net/manual/en/function.date.php for valid tags.
+#: lastfm-for-artists.php:950
+#: lastfm-for-artists.php:965
+msgid "%H:%M"
+msgstr "%H:%M"
+
+# Error message, if no artistname is empty.
+#: lastfm-for-artists.php:1032
+#: lastfm-for-artists.php:1071
+msgid "You need to set a Last.FM artistname!"
+msgstr "Du musst den Namen des K&uuml;nstlers in den Optionen einstellen!"
+
+# Error Message if artist name is empty, part 2.
+#: lastfm-for-artists.php:1032
+#: lastfm-for-artists.php:1071
+msgid "Edit the widget settings to add it."
+msgstr "Ver&auml;ndere dazu die Widget-Optionen."
+
+#: lastfm-for-artists.php:1035
+msgid "No events coming up."
+msgstr "Keine Konzerte in Sicht."
+
+# The localized homepage of Last.fm
+#: lastfm-for-artists.php:1039
+#: lastfm-for-artists.php:1078
+msgid "www.last.fm"
+msgstr "www.lastfm.de"
+
+#: lastfm-for-artists.php:1074
+msgid "No tracks found."
+msgstr "Keine Titel gefunden."
+
+# if in your language you need a prefix before the countdown, copy that one and translate "In" otherwise set this one to "false" and use translation of "noch" as suffix.
+#: lastfm-for-artists.php:1107
+#: lastfm-for-artists.php:1108
+msgid "usefutureprefix"
+msgstr "usefutureprefix"
+
+#: lastfm-for-artists.php:1107
+msgid "In "
+msgstr "In "
+
+#: lastfm-for-artists.php:1108
+msgid " noch"
+msgstr " noch"
+
+# if in your language you need a prefix for a past countdown, set this to false and translate "Vor" otherwise just copy and translate "ago"
+#: lastfm-for-artists.php:1112
+#: lastfm-for-artists.php:1113
+msgid "usepastprefix"
+msgstr "false"
+
+#: lastfm-for-artists.php:1112
+msgid "Vor "
+msgstr "Vor "
+
+#: lastfm-for-artists.php:1113
+msgid " ago"
+msgstr " her"
+
+#: lastfm-for-artists.php:1136
+msgid "month"
+msgstr "Monat"
+
+#: lastfm-for-artists.php:1138
+msgid "months"
+msgstr "Monate"
+
+#: lastfm-for-artists.php:1142
+#: lastfm-for-artists.php:1157
+msgid "and"
+msgstr "und"
+
+#: lastfm-for-artists.php:1144
+msgid "week"
+msgstr "Woche"
+
+#: lastfm-for-artists.php:1146
+msgid "weeks"
+msgstr "Wochen"
+
+#: lastfm-for-artists.php:1152
+msgid "Today"
+msgstr "Heute"
+
+#: lastfm-for-artists.php:1159
+msgid "day"
+msgstr "Tag"
+
+#: lastfm-for-artists.php:1161
+msgid "days"
+msgstr "Tagen"
+
+#~ msgid "Advanced Customizations"
+#~ msgstr "Erweiterte Einstellungen"
+
