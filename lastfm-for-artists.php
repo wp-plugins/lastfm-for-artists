@@ -346,7 +346,6 @@ a:hover .lfmfa_tooltip4 {
 require_once(ABSPATH . WPINC . '/class-snoopy.php');
 
 class LastFmForArtists {
-	// widget defaults.
 
 	// the constructor, plugin-initializer
 	function LastFmForArtists()
