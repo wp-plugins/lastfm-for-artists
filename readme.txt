@@ -4,7 +4,7 @@ Donate link: http://www.brain-jek.de/
 Tags: lastfm, events, gigs, charts, top, concerts, music, widget, sidebar, REST, calendar
 Requires at least: 2.5
 Tested up to: 2.7.1
-Stable Tag: 0.7
+Stable Tag: 0.7.1
 
 This plugin adds a fully customizable sidebar-widget to list an artists upcoming shows or top tracks from Last.FM (using the new 2.0 REST API).
 
