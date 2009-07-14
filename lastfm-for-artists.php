@@ -367,12 +367,13 @@ class LastFmForArtists {
 
 	// helper to clean format string before replacements
 	function sanitize_formatstring($formatstring) {
-		// replace single quotes with double quotes
 		$result = $formatstring;
-		//$result = preg_replace("/'/", '"', $formatstring);
+		// TODO replace single quotes with double quotes needed?
+		//$result = preg_replace("/'/", '"', $result);
+
 		// variable syntax in format strings is %VARIABlE:variable-name:variable-value%
 		// delete variables-declaration from format-strings, needed to actually work with an variables value
-		$result = preg_replace('/%VARIABLE:([^%]):([^%])%/', '${2}', $formatstring);
+		$result = preg_replace('/%VARIABLE:([^%:]+):([^%]*)%/', '${2}', $result);
 		return $result;
 	}
 
@@ -939,7 +940,7 @@ class LastFmForArtists {
 		$event_string = $format_string;
 
 		// do some date formating, if multi day make "01.-03.01.2000" else ("01.01.2000" or "01.01.2000 20:00" when available)
-		// TODO: check when multi day if month is the same
+		// TODO: check for multi day whether month is the same
 		$start_date = isset($event['startDate']) ? strftime(__('%d.%m.%y', LFM_US_DOMAIN), $event['startDate']) : '';
 		$end_date = isset($event['endDate']) ? strftime(__('%d.%m.%y',LFM_US_DOMAIN), $event['endDate']) : $start_date;
 

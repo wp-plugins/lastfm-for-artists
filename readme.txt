@@ -47,6 +47,11 @@ Do your server run php5? We need the "DOM" section of your phpinfo() show "enabl
 = There's an error message like "ERROR: domdocument::domdocument() expects 2 parameter to be long" =
 Disable the `domxml` extension of your php installation. `domxml` is a legacy extension introduced for php4 which lacks cool dom-functions. But in php5 they are built in and - guess what - **incompatible** with the old extension. So we rely on the new bright and shiny built-in functions.
 
+= Can I use this plugin without a widget? =
+Unfortunately this is not possible. As all options are set on a per-widget basis, there is no way to display a list without a widget.
+
+= Can you translate the plugin to language [insert-your-language] =
+No... but: **You can!** Just have a look at the translation files and/or contact me for further instructions.
 
 == Other Notes ==
 
