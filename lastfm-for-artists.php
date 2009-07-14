@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Last.FM for Artists
-Version: 0.7
+Version: 0.7.1
 Plugin URI: http://www.brain-jek.de/wordpress/lastfm-for-artists/
 Description: Loads data of an artist and displays it on your blog. Uses Last.FMs REST 2.0 APIs. Loosely based on Simon Wheatley Last.FM Events plugin.
 Author: J.org
