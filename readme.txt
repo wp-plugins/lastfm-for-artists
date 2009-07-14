@@ -20,7 +20,7 @@ Current features:
 * multiple widgets the way they meant to be (add arbitrarily many widget instances to your sidebar)
 * comes with many pre-defined widget layouts
 * complete customization of widget layout possible via format strings and tags
-* I18n available: English, German. Add your own!
+* I18n available: English, German, Russian. Add your own!
 
 Please let me know about bugs and improper translations you may encounter.
 
