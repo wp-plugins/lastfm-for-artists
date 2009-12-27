@@ -1,0 +1,40 @@
+.tipped {
+	float:left;
+	text-align:left;
+	padding-right:5px;
+	width:30%;
+}
+.tipped a {
+	font-size:smaller;
+	position: relative;
+	color:#660000;
+	text-decoration:none;
+}
+.tipped a span {
+	display: none;
+	font: 11px arial,helvetica,sans-serif;
+	color: #000000;
+	z-index:10;
+	width:250px;
+	position: absolute;
+	top: 20px;
+	left: 35px;
+	background-color: #FFFF99;
+	border: 1px solid #003399;
+	text-decoration: none;
+	padding: 3px;
+	margin: 0px;
+} 
+.tipped a:hover{
+	color: #CC0000;
+}
+.tipped a:hover span {
+	display: block;
+	opacity: .9;
+	filter: alpha(opacity=90);
+}
+.lfmfa-format-string {
+	line-height:13px;
+	font-size:10px;
+	height:40px;
+}

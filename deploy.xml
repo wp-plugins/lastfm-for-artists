@@ -1,0 +1,22 @@
+<project name="Last.fm for Artists" default="deploy" basedir=".">
+    <description>
+        Simple copier
+    </description>
+  <!-- set global properties for this build -->
+  <property name="build" location="../../../xampp/htdocs/wordpress/wp-content/plugins/lastfm-for-artists"/>
+
+  <target name="deploy">
+    <!-- Create the time stamp -->
+    <tstamp prefix="build"/>
+  	<echo message="Project deployed ${build.TSTAMP} ${build.TODAY}." level="info"/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+    <copy todir="${build}">
+    	<fileset dir=".">
+    		<exclude name="**/.*"/>
+    		<exclude name="**/*.launch"/>
+    		<exclude name="deploy.xml"/>
+    	</fileset>
+    </copy>
+  </target>
+</project>
