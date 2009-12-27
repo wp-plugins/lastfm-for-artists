@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Last.FM for Artists
-Version: 0.7.1
+Version: 0.7.2
 Plugin URI: http://www.brain-jek.de/wordpress/lastfm-for-artists/
 Description: Loads data of an artist and displays it on your blog. Uses Last.FMs REST 2.0 APIs. Loosely based on Simon Wheatley Last.FM Events plugin.
 Author: J.org
@@ -268,6 +268,9 @@ a .lfmfa_tooltip4 {
 	padding: 3px;
 	margin: 0px;
 }
+a .lfmfa_tooltip4 img {
+	width: 100%;
+}
 a:hover .lfmfa_tooltip4 {
 	display: block;
 	opacity: .9;
@@ -310,6 +313,9 @@ a .lfmfa_tooltip4 {
 	padding: 3px;
 	margin: 0px;
 }
+a .lfmfa_tooltip4 img {
+	width: 100%;
+}
 a:hover .lfmfa_tooltip4 {
 	display: block;
 	opacity: .9;
@@ -350,7 +356,7 @@ class LastFmForArtists {
 	// the constructor, plugin-initializer
 	function LastFmForArtists()
 	{
-		// this adds a little css and ajvascript to the admin widget page allowing for neat css-tooltips and some more style.
+		// this adds a little css and javascript to the admin widget page allowing for neat css-tooltips and some more style.
 		add_action( 'admin_head', array( &$this, 'lfm4a_admin_head' ) );
 
 		// Run our widget initialization code
@@ -1039,22 +1045,27 @@ class LastFmForArtists {
 				$specials = array ( 'NUMBER-OF-EVENTS' 	=> sizeof($events),
 									'ARTIST-URL' 		=> "http://".__('www.last.fm', LFM_US_DOMAIN)."/music/$artistname/+events/"
 								);
+				// use first events data to expand header
 				echo $this->expand_lastfm_event_tags( $pre_format_string, $events[0], $specials );
+				
 				foreach ( $events as $counter => $event ) {
 					// ignore meta
 					if ($counter  === 'modified_timestamp') continue;
+					
+					// copy over event data to event variable (prevents the loop to override event with meta info)
+					$realEvent = $event;
 
 					// prepare event-specials
 					$specials['NUMBER'] = $counter;
 
 					// expand and output format-string
-					echo $this->expand_lastfm_event_tags( $format_string, $event, $specials );
+					echo $this->expand_lastfm_event_tags( $format_string, $realEvent, $specials );
 
 					// break loop if max events are reached.
 					if ( $counter >= $num-1 ) break;
 				}
 				// specials are already of last event
-				if ($counter !== 'modified_timestamp') echo $this->expand_lastfm_event_tags( $post_format_string, $event, $specials );
+				echo $this->expand_lastfm_event_tags( $post_format_string, $realEvent, $specials );
 			}
 		}
 	}
@@ -1078,22 +1089,27 @@ class LastFmForArtists {
 				$specials = array ( 'NUMBER-OF-TRACKS' 	=> sizeof($toptracks),
 									'ARTIST-URL' 		=> "http://".__('www.last.fm', LFM_US_DOMAIN)."/music/$artistname/"
 								);
+				// use first tracks data to expand header
 				echo $this->expand_lastfm_toptrack_tags( $pre_format_string, $toptracks[0], $specials );
+				
 				foreach ( $toptracks as $counter => $toptrack ) {
 					// ignore meta
 					if ($counter  === 'modified_timestamp') continue;
+					
+					// copy over track data to track variable (prevents the loop to override track with meta info)
+					$realTrack = $toptrack;
 
 					// prepare event-specials
 					$specials['NUMBER'] = $counter;
 
 					// expand and output format-string
-					echo $this->expand_lastfm_toptrack_tags( $format_string, $toptrack, $specials );
+					echo $this->expand_lastfm_toptrack_tags( $format_string, $realTrack, $specials );
 
 					// break loop if max events are reached.
 					if ( $counter >= $num-1 ) break;
 				}
 				// specials are already of last event
-				echo $this->expand_lastfm_toptrack_tags( $post_format_string, $toptrack, $specials );
+				echo $this->expand_lastfm_toptrack_tags( $post_format_string, $realTrack, $specials );
 			}
 		}
 	}
