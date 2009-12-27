@@ -1,4 +1,4 @@
-=== Last.fm For Artists ===
+﻿=== Last.fm For Artists ===
 Contributors: j.org
 Donate link: http://www.brain-jek.de/
 Tags: lastfm, events, gigs, charts, top, concerts, music, widget, sidebar, REST, calendar
