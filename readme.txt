@@ -30,16 +30,20 @@ Please let me know about bugs and improper translations you may encounter.
 1. Left: A simple unordered list of the upcoming events. Middle-top: More sophisticated, a GoogleMaps mash-up displaying the tour. Middle-bottom: display an artists top tracks. Right: The widget options.
 
 == Changelog ==
-=0.7.2=
+
+= 0.7.2 =
+
 * [CHECK] Compatibility with wordpress 2.9
 * [FIX] css tweak in built-in layouts
 * [FIX] some configurations generated invalid markup.
 
-=0.7.1=
+= 0.7.1 =
+
 * [FIX] Variable substitution for GoogleMaps generated invalid markup
 * [ADD] Russian translation by "Fat Cow" (www.fatcow.com)
 
-=0.7=
+= 0.7 =
+
 * [FIX] uninstall method changed
 * [FIX] another try to avoid doubled entries
 * [FIX] hide-if-empty was broken
@@ -47,41 +51,46 @@ Please let me know about bugs and improper translations you may encounter.
 * [CHANGE] the built-in layouts now feature robust, CSS-driven tooltips
 * [ADD] there is a new special tag for variables %VARIABLE:<name-of-variable>:<value-of-variable>% which is only useful in built-in configurations and needed for things like API keys
 
-=0.6.2=
+= 0.6.2 =
+
 * [FIX] Thickbox script now only in admin panel, hence avoiding the 404 when auto-loading loadingAnimation.gif in posts with permalinks enabled.
 
-=0.6.1=
+= 0.6.1 =
+
 * [FIX] CSS Compatibility with 2.7
 * [FIX] Plugin subtitle in widget view localized
 * [ADD] Un-Installation procedure
 * [ADD] Introducing advanced customization ;)
 
-=0.6=
+= 0.6 =
 * [ADD] New widget type: top tracks
 ** lists your top 50 (or less)
 ** comes with own set of 11 tags, including a special, if-then tag
 ** I included a working example, which illustrates the power. See the examples on the documentation page for a short explanation.
 * [ADD] more clarity in widget options
 
-=0.5=
+= 0.5 =
+
 * [ADD] Multi-Widget support added. Thanks to Millan and Firephp
 
-=0.4=
+= 0.4 =
 * [FIX] Widget-Options bug when adding the widget to the sidebar.
 * [FIX] Date-Tag bug
 * [ADD] Some new Meta-Tags: %NUMBER-OF-EVENTS%, %NUMBER%, %ARTIST-URL%
 * [ADD] Additional options for header and footer, allowing complete customization.
 
-=0.3=
+= 0.3 =
+
 * Completed tag support: Every delivered field may now be used.
 * Language support enabled, German and English included. You are welcome to submit your language, since the necessary files to translate are in the "lang" folder.
 
-=0.2=
+= 0.2 =
+
 * Extended tag support: Almost every field of the XML answer may now be used
 * Language support prepared.
 * more style in widget options
 
-=0.1=
+= 0.1 =
 * Initial Version based on Simon Wheatley Last.FM Events plug-in.
 
 == Frequently Asked Questions ==
